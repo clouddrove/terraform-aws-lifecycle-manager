@@ -1,0 +1,55 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+# Name of this project
+name: Terraform AWS lifecycle manager
+
+# License of this project
+license: "MIT"
+
+# Canonical GitHub repo
+github_repo: clouddrove/terraform-aws-lifecyle-manager
+
+# Badges to display
+badges:
+  - name: "Terraform"
+    image: "https://img.shields.io/badge/Terraform-v0.15-green"
+    url: "https://www.terraform.io"
+  - name: "Licence"
+    image: "https://img.shields.io/badge/License-MIT-blue.svg"
+    url: "LICENSE.md"
+
+#  description of this project
+description: |-
+  Provides a Data Lifecycle Manager (DLM) lifecycle policy for managing snapshots.
+
+# extra content
+include:
+  - "terraform.md"
+
+# How to use this project
+# yamllint disable rule:line-length
+usage: |-
+  ### Simple Example
+  Here is an example of how you can use this module in your inventory structure:
+  ```hcl
+      module "lifecycle-manager" {
+        source          = "clouddrove/lifecycle-manager/aws"
+        version         = "0.15.0"
+        name        = "lifecycle"
+        environment = "test"
+        label_order = ["name", "environment"]
+
+        resource_types  = ["VOLUME"]
+        interval        = 24
+        interval_unit   = "HOURS"
+        times           = ["03:00"]
+        count-number    = 44
+        SnapshotCreator = "DLM"
+        copy_tags       =  true
+        target_tags     = true
+      }
+  ```
