@@ -13,8 +13,8 @@ module "labels" {
 
 resource "aws_iam_role" "dlm_lifecycle_role" {
   count = var.create_lifecycle_policy == true ? 1 : 0
-  name = format("%s-role", module.labels.id)
-  tags = module.labels.tags
+  name  = format("%s-role", module.labels.id)
+  tags  = module.labels.tags
 
   assume_role_policy = <<EOF
 {
@@ -35,8 +35,8 @@ EOF
 
 resource "aws_iam_role_policy" "dlm_lifecycle" {
   count = var.create_lifecycle_policy == true ? 1 : 0
-  name = module.labels.id
-  role = join("", aws_iam_role.dlm_lifecycle_role.*.id)
+  name  = module.labels.id
+  role  = join("", aws_iam_role.dlm_lifecycle_role.*.id)
 
   policy = <<EOF
 {
@@ -67,7 +67,7 @@ EOF
 }
 
 resource "aws_dlm_lifecycle_policy" "main" {
-  count = var.create_lifecycle_policy == true ? 1 : 0
+  count              = var.create_lifecycle_policy == true ? 1 : 0
   description        = "DLM lifecycle policy"
   execution_role_arn = join("", aws_iam_role.dlm_lifecycle_role.*.arn)
   state              = "ENABLED"
@@ -97,6 +97,6 @@ resource "aws_dlm_lifecycle_policy" "main" {
 
     target_tags = var.target_tags
   }
-  tags               = module.labels.tags
-  tags_all           = module.labels.tags
+  tags     = module.labels.tags
+  tags_all = module.labels.tags
 }

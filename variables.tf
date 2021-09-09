@@ -1,6 +1,5 @@
 #Module      : LABEL
 #Description : Terraform label module variables.
-
 variable "name" {
   type        = string
   default     = ""
@@ -38,8 +37,8 @@ variable "attributes" {
 }
 
 variable "create_lifecycle_policy" {
-  type  = bool
-  default = true
+  type        = bool
+  default     = true
   description = "Manage Enable or Disable the module."
 }
 variable "resource_types" {
