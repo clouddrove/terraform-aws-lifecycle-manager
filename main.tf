@@ -14,6 +14,7 @@ module "labels" {
 resource "aws_iam_role" "dlm_lifecycle_role" {
   count = var.create_lifecycle_policy == true ? 1 : 0
   name = format("%s-role", module.labels.id)
+  tags = module.labels.tags
 
   assume_role_policy = <<EOF
 {
@@ -68,7 +69,7 @@ EOF
 resource "aws_dlm_lifecycle_policy" "main" {
   count = var.create_lifecycle_policy == true ? 1 : 0
   description        = "DLM lifecycle policy"
-  execution_role_arn = aws_iam_role.dlm_lifecycle_role.arn
+  execution_role_arn = join("", aws_iam_role.dlm_lifecycle_role.*.arn)
   state              = "ENABLED"
 
   policy_details {
