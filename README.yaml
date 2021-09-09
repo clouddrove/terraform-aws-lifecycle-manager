@@ -39,9 +39,9 @@ usage: |-
       module "lifecycle-manager" {
         source          = "clouddrove/lifecycle-manager/aws"
         version         = "0.15.0"
-        name        = "lifecycle"
-        environment = "test"
-        label_order = ["name", "environment"]
+        name            = "lifecycle"
+        environment     = "test"
+        label_order     = ["name", "environment"]
 
         resource_types  = ["VOLUME"]
         interval        = 24

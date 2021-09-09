@@ -37,6 +37,11 @@ variable "attributes" {
   description = "Additional attributes (e.g. `1`)."
 }
 
+variable "create_lifecycle_policy" {
+  type  = bool
+  default = true
+  description = "Manage Enable or Disable the module."
+}
 variable "resource_types" {
   type        = list(any)
   default     = []
@@ -73,7 +78,6 @@ variable "SnapshotCreator" {
   description = "Policy details for customer values."
 }
 
-
 variable "policy_details" {
   type        = bool
   default     = true
@@ -85,7 +89,6 @@ variable "copy_tags" {
   default     = ""
   description = "tags of false and true."
 }
-
 
 variable "target_tags" {
   type        = map(any)

@@ -2,7 +2,6 @@ module "labels" {
   source  = "clouddrove/labels/aws"
   version = "0.15.0"
 
-
   name        = var.name
   repository  = var.repository
   environment = var.environment
@@ -13,7 +12,8 @@ module "labels" {
 
 
 resource "aws_iam_role" "dlm_lifecycle_role" {
-  name = module.labels.id
+  count = var.create_lifecycle_policy == true ? 1 : 0
+  name = format("%s-role", module.labels.id)
 
   assume_role_policy = <<EOF
 {
@@ -33,8 +33,9 @@ EOF
 }
 
 resource "aws_iam_role_policy" "dlm_lifecycle" {
+  count = var.create_lifecycle_policy == true ? 1 : 0
   name = module.labels.id
-  role = aws_iam_role.dlm_lifecycle_role.id
+  role = join("", aws_iam_role.dlm_lifecycle_role.*.id)
 
   policy = <<EOF
 {
@@ -64,10 +65,9 @@ resource "aws_iam_role_policy" "dlm_lifecycle" {
 EOF
 }
 
-resource "aws_dlm_lifecycle_policy" "example" {
+resource "aws_dlm_lifecycle_policy" "main" {
+  count = var.create_lifecycle_policy == true ? 1 : 0
   description        = "DLM lifecycle policy"
-  tags               = module.labels.tags
-  tags_all           = module.labels.tags
   execution_role_arn = aws_iam_role.dlm_lifecycle_role.arn
   state              = "ENABLED"
 
@@ -96,4 +96,6 @@ resource "aws_dlm_lifecycle_policy" "example" {
 
     target_tags = var.target_tags
   }
+  tags               = module.labels.tags
+  tags_all           = module.labels.tags
 }
