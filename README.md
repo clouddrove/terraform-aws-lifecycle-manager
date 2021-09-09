@@ -4,7 +4,7 @@
 
 
 <h1 align="center">
-    Terraform AWS Keypair
+    Terraform AWS lifecycle manager
 </h1>
 
 <p align="center" style="font-size: 1.2rem;"> 
