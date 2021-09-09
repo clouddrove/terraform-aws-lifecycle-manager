@@ -8,7 +8,7 @@
 </h1>
 
 <p align="center" style="font-size: 1.2rem;"> 
-    Terraform module for generating or importing an SSH public key file into AWS.
+    Provides a Data Lifecycle Manager (DLM) lifecycle policy for managing snapshots.
      </p>
 
 <p align="center">
@@ -24,13 +24,13 @@
 </p>
 <p align="center">
 
-<a href='https://facebook.com/sharer/sharer.php?u=https://github.com/clouddrove/terraform-aws-keypair'>
+<a href='https://facebook.com/sharer/sharer.php?u=https://github.com/clouddrove/terraform-aws-lifecyle-manager'>
   <img title="Share on Facebook" src="https://user-images.githubusercontent.com/50652676/62817743-4f64cb80-bb59-11e9-90c7-b057252ded50.png" />
 </a>
-<a href='https://www.linkedin.com/shareArticle?mini=true&title=Terraform+AWS+Keypair&url=https://github.com/clouddrove/terraform-aws-keypair'>
+<a href='https://www.linkedin.com/shareArticle?mini=true&title=Terraform+AWS+lifecycle+manager&url=https://github.com/clouddrove/terraform-aws-lifecyle-manager'>
   <img title="Share on LinkedIn" src="https://user-images.githubusercontent.com/50652676/62817742-4e339e80-bb59-11e9-87b9-a1f68cae1049.png" />
 </a>
-<a href='https://twitter.com/intent/tweet/?text=Terraform+AWS+Keypair&url=https://github.com/clouddrove/terraform-aws-keypair'>
+<a href='https://twitter.com/intent/tweet/?text=Terraform+AWS+lifecycle+manager&url=https://github.com/clouddrove/terraform-aws-lifecyle-manager'>
   <img title="Share on Twitter" src="https://user-images.githubusercontent.com/50652676/62817740-4c69db00-bb59-11e9-8a79-3580fbbf6d5c.png" />
 </a>
 
@@ -51,7 +51,7 @@ We have [*fifty plus terraform modules*][terraform_modules]. A few of them are c
 
 This module has a few dependencies: 
 
-- [Terraform 0.13](https://learn.hashicorp.com/terraform/getting-started/install.html)
+- [Terraform 0.15](https://learn.hashicorp.com/terraform/getting-started/install.html)
 - [Go](https://golang.org/doc/install)
 - [github.com/stretchr/testify/assert](https://github.com/stretchr/testify)
 - [github.com/gruntwork-io/terratest/modules/terraform](https://github.com/gruntwork-io/terratest)
@@ -65,17 +65,27 @@ This module has a few dependencies:
 ## Examples
 
 
-**IMPORTANT:** Since the `master` branch used in `source` varies based on new modifications, we suggest that you use the release versions [here](https://github.com/clouddrove/terraform-aws-keypair/releases).
+**IMPORTANT:** Since the `master` branch used in `source` varies based on new modifications, we suggest that you use the release versions [here](https://github.com/clouddrove/terraform-aws-lifecyle-manager/releases).
 
 
 ### Simple Example
 Here is an example of how you can use this module in your inventory structure:
 ```hcl
-    module "keypair" {
-      source          = "clouddrove/keypair/aws"
+    module "lifecycle-manager" {
+      source          = "clouddrove/lifecycle-manager/aws"
       version         = "0.15.0"
-      enable_key_pair = true
-      public_key      = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQ"
+      name            = "lifecycle"
+      environment     = "test"
+      label_order     = ["name", "environment"]
+
+      resource_types  = ["VOLUME"]
+      interval        = 24
+      interval_unit   = "HOURS"
+      times           = ["03:00"]
+      count-number    = 44
+      SnapshotCreator = "DLM"
+      copy_tags       =  true
+      target_tags     = true
     }
 ```
 
@@ -88,23 +98,29 @@ Here is an example of how you can use this module in your inventory structure:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| attributes | Additional attributes (e.g. `1`). | `list(string)` | `[]` | no |
-| enable\_key\_pair | A boolean flag to enable/disable key pair. | `bool` | `true` | no |
+| SnapshotCreator | Policy details for customer values. | `string` | `""` | no |
+| attributes | Additional attributes (e.g. `1`). | `list(any)` | `[]` | no |
+| copy\_tags | tags of false and true. | `string` | `""` | no |
+| count-number | How many snapshots to keep. Must be an integer between 1 and 1000. | `number` | `null` | no |
+| create\_lifecycle\_policy | Manage Enable or Disable the module. | `bool` | `true` | no |
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
-| key\_name | Name  (e.g. `it-admin` or `devops`). | `string` | `""` | no |
-| key\_path | Name  (e.g. `~/.ssh/id_rsa.pub`). | `string` | `""` | no |
-| label\_order | label order, e.g. `name`,`application`. | `list(any)` | `[]` | no |
+| interval | How often this lifecycle policy should be evaluated. 1, 2,3,4,6,8,12 or 24 are valid values. | `number` | `null` | no |
+| interval\_unit | The unit for how often the lifecycle policy should be evaluated. HOURS is currently the only allowed value and also the default value. | `string` | `""` | no |
+| label\_order | Label order, e.g. `name`,`application`. | `list(any)` | `[]` | no |
 | managedby | ManagedBy, eg 'CloudDrove'. | `string` | `"hello@clouddrove.com"` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
-| public\_key | Name  (e.g. `ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQ`). | `string` | `""` | no |
-| repository | Terraform current module repo | `string` | `"https://github.com/clouddrove/terraform-aws-keypair"` | no |
-| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(string)` | `{}` | no |
+| policy\_details | Policy details for customer values. | `bool` | `true` | no |
+| repository | Terraform current module repo | `string` | `"https://github.com/clouddrove/terraform-aws-lifecycle-manager"` | no |
+| resource\_types | A list of resource types that should be targeted by the lifecycle policy. VOLUME is currently the only allowed value. | `list(any)` | `[]` | no |
+| target\_tags | tags of false and true. | `map(any)` | `{}` | no |
+| times | A list of times in 24 hour clock format that sets when the lifecycle policy should be evaluated. Max of 1. | `list(any)` | `[]` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| name | Name of SSH key. |
+| dlm\_lifecycle\_role\_arn | Amazon Resource Name (ARN) of the DLM Lifecycle Policy. |
+| dlm\_lifecycle\_role\_id | Identifier of the DLM Lifecycle Policy. |
 
 
 
@@ -120,9 +136,9 @@ You need to run the following command in the testing folder:
 
 
 ## Feedback 
-If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/clouddrove/terraform-aws-keypair/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
+If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/clouddrove/terraform-aws-lifecyle-manager/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
 
-If you have found it worth your time, go ahead and give us a ★ on [our GitHub](https://github.com/clouddrove/terraform-aws-keypair)!
+If you have found it worth your time, go ahead and give us a ★ on [our GitHub](https://github.com/clouddrove/terraform-aws-lifecyle-manager)!
 
 ## About us
 
