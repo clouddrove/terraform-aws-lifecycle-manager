@@ -9,7 +9,7 @@ module "lifecycle" {
   environment = "test"
   label_order = ["name", "environment"]
 
-  resource_types  = ["VOLUME"]
+  resource_types  = ["INSTANCE"]
   interval        = 24
   interval_unit   = "HOURS"
   times           = ["03:00"]
