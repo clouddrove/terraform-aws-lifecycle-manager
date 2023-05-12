@@ -8,4 +8,4 @@ terraform {
       version = ">= 4.48.0"
     }
   }
-}
+} 
