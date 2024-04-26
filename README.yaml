@@ -11,16 +11,16 @@ name: Terraform AWS lifecycle manager
 license: "APACHE"
 
 # Canonical GitHub repo
-github_repo: clouddrove/terraform-aws-lifecyle-manager
+github_repo: clouddrove/terraform-aws-lifecycle-manager
 
 # Badges to display
 badges:
   - name: "Latest Release"
-    image: "https://img.shields.io/github/release/clouddrove/terraform-aws-lifecyle-manager.svg"
-    url: "https://github.com/clouddrove/terraform-aws-lifecyle-manager/releases/latest"
+    image: "https://img.shields.io/github/release/clouddrove/terraform-aws-lifecycle-manager.svg"
+    url: "https://github.com/clouddrove/terraform-aws-lifecycle-manager/releases/latest"
   - name: "tfsec"
-    image: "https://github.com/clouddrove/terraform-aws-lifecyle-manager/actions/workflows/tfsec.yml/badge.svg"
-    url: "https://github.com/clouddrove/terraform-aws-lifecyle-manager/actions/workflows/tfsec.yml"
+    image: "https://github.com/clouddrove/terraform-aws-lifecycle-manager/actions/workflows/tfsec.yml/badge.svg"
+    url: "https://github.com/clouddrove/terraform-aws-lifecycle-manager/actions/workflows/tfsec.yml"
   - name: "Licence"
     image: "https://img.shields.io/badge/License-APACHE-blue.svg"
     url: "LICENSE.md"
