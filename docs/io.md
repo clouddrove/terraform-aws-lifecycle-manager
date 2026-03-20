@@ -25,4 +25,3 @@
 |------|-------------|
 | dlm\_lifecycle\_role\_arn | Amazon Resource Name (ARN) of the DLM Lifecycle Policy. |
 | dlm\_lifecycle\_role\_id | Identifier of the DLM Lifecycle Policy. |
-
